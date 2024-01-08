@@ -14,6 +14,16 @@ const nextConfig = {
 		)
 		return config
 	},
+	images: {
+		remotePatterns: [
+			{
+				protocol: 'https',
+				hostname: 'kendev01.infura-ipfs.io',
+				port: '',
+				pathname: '/ipfs/**',
+			},
+		],
+	},
 }
 
 module.exports = nextConfig

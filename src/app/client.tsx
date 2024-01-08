@@ -2,17 +2,19 @@
 
 import { SiweMessage } from 'siwe'
 import { APP_NAME } from '@/lib/consts'
+import { polygonMumbai } from 'viem/chains'
 import { useRouter } from 'next/navigation'
-import { FC, PropsWithChildren } from 'react'
 import { WagmiConfig, createConfig } from 'wagmi'
 import { IconContext } from '@phosphor-icons/react'
-import { ConnectKitProvider, SIWEConfig, SIWEProvider, getDefaultConfig, useSIWE } from 'connectkit'
+import { FC, PropsWithChildren, useEffect } from 'react'
+import { ConnectKitProvider, SIWEConfig, SIWEProvider, getDefaultConfig } from 'connectkit'
 
 const config = createConfig(
 	getDefaultConfig({
 		appName: APP_NAME,
 		infuraId: process.env.NEXT_PUBLIC_INFURA_ID,
 		walletConnectProjectId: process.env.NEXT_PUBLIC_WC_ID!,
+		chains: [polygonMumbai],
 	})
 )
 
@@ -46,13 +48,14 @@ const siweConfig: SIWEConfig = {
 		if (!res.ok) throw new Error('Failed to fetch SIWE session')
 
 		const { userId } = await res.json()
-		return userId ? { address: userId, chainId: 1 } : null
+		return userId ? { address: userId, chainId: 80001 } : null
 	},
 	signOut: () => fetch(`/login/siwe`, { method: 'DELETE' }).then(res => res.ok),
 }
 
 const ClientLayout: FC<PropsWithChildren<{}>> = ({ children }) => {
 	const router = useRouter()
+
 	return (
 		<IconContext.Provider value={{ color: 'currentColor', size: '' }}>
 			<WagmiConfig config={config}>
