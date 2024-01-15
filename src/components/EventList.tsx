@@ -15,11 +15,6 @@ export const EventList: FC<{}> = () => {
 	const { isOrganizer } = useIsOrganizer()
 
 	const router = useRouter()
-	// const {} = useAccount({
-	// 	onDisconnect() {
-	// 		router.replace('/')
-	// 	},
-	// })
 
 	if (isFetching) {
 		return <BlockPlaceholder />

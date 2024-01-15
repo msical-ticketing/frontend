@@ -2,7 +2,6 @@
 
 import Input from './ui/Input'
 import Button from './ui/Button'
-import { uploadIPFS } from '@/lib/ipfs'
 import Card, { CardContent, CardFooter } from './ui/Card'
 import { Dispatch, FC, SetStateAction, useState } from 'react'
 import { CreateTicketParams } from '../interfaces/CreateTicketParams'
@@ -16,30 +15,8 @@ const CreateTicketForm: FC<{
 	const onImageChange = async (e: any) => {
 		const file = e.target.files[0]
 
-		setLoading(true)
-		const _imageUrl = await uploadIPFS(file)
-		updateTicketImage(index, _imageUrl)
-
-		setLoading(false)
+		updateTicketImage(index, file)
 	}
-
-	// const onSubmit = async (data: any) => {
-	// 	// todo: verify input fields
-	// 	const metadata = {
-	// 		name: data.name,
-	// 		description: data.description,
-	// 		image: imageUrl,
-	// 	}
-
-	// 	const uri = await uploadIPFS(JSON.stringify(metadata))
-	// 	console.log('uri', uri)
-
-	// 	const newTicket: CreateTicketParams = {
-	// 		totalSupply: data.supply,
-	// 		price: data.price,
-	// 		uri,
-	// 	}
-	// }
 
 	return (
 		<Card>

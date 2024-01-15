@@ -2,7 +2,6 @@
 
 import { APP_NAME } from '../lib/consts'
 import { polygonMumbai } from 'viem/chains'
-import { useRouter } from 'next/navigation'
 import { FC, PropsWithChildren } from 'react'
 import { WagmiConfig, createConfig } from 'wagmi'
 import { IconContext } from '@phosphor-icons/react'
@@ -18,8 +17,6 @@ const config = createConfig(
 )
 
 const WagmiLayout: FC<PropsWithChildren<{}>> = ({ children }) => {
-	const router = useRouter()
-
 	return (
 		<IconContext.Provider value={{ color: 'currentColor', size: '' }}>
 			<WagmiConfig config={config}>

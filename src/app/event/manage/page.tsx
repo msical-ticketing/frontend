@@ -4,14 +4,10 @@ import { EventList } from '@/components'
 import { useRouter } from 'next/navigation'
 
 const EventManagementPage = () => {
-	// const router = useRouter()
+	const { address } = useAccount()
+	const router = useRouter()
 
-	// const {} = useAccount({
-	// 	onDisconnect() {
-	// 		router.replace('/')
-	// 	},
-	// })
-
+	if (address == process.env.NEXT_PUBLIC_OWNER) router.replace('/admin')
 	return (
 		<div className="space-y-8">
 			<EventList />

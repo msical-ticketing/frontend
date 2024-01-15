@@ -3,7 +3,10 @@ import Image from 'next/image'
 import Input from './ui/Input'
 import Button from './ui/Button'
 import { FC, useState } from 'react'
+import { useBuyTicket } from '../hooks'
 import { useContractWrite } from 'wagmi'
+import LoadingModal from './modals/Loading'
+import SuccessModal from './modals/Success'
 import { SellingTicket } from '@/interfaces'
 import msicalABI from '@/assets/Msical.json'
 import { formatEther, parseEther } from 'viem'
@@ -15,11 +18,20 @@ const SellingTicketCard: FC<{ ticket: SellingTicket; eventId: string }> = ({ tic
 	const [isOpen, setOpen] = useState<boolean>(false)
 	const form = useForm<{}>({})
 
-	const { write } = useContractWrite({
-		address: `0x${process.env.NEXT_PUBLIC_MSICAL_CONTRACT}`,
-		abi: msicalABI.abi,
-		functionName: 'buyTicket',
-	})
+	const { write, isLoading, isSuccess, data, status } = useBuyTicket()
+
+	const onSubmit = (data: any) => {
+		write({
+			args: [`0x${process.env.NEXT_PUBLIC_MSICAL_COLLECTION}`, eventId, ticket.id, data.amount],
+			value: BigInt(data.amount) * BigInt(ticket.price),
+		})
+
+		setOpen(false)
+	}
+
+	if (isLoading) return <LoadingModal open={isLoading} />
+
+	if (isSuccess) return <SuccessModal open={isSuccess} txHash={data?.hash} path="/purchased" />
 
 	return (
 		<Dialog open={isOpen} onOpenChange={setOpen}>
@@ -52,17 +64,7 @@ const SellingTicketCard: FC<{ ticket: SellingTicket; eventId: string }> = ({ tic
 				</CardFooter>
 			</Card>
 			<DialogContent className="pt-12">
-				<Form
-					{...form}
-					onSubmit={(data: any) => {
-						console.log('ticket', ticket)
-						console.log('data', data)
-						write({
-							args: [`0x${process.env.NEXT_PUBLIC_MSICAL_COLLECTION}`, eventId, ticket.id, data.amount],
-							value: BigInt(data.amount) * BigInt(ticket.price),
-						})
-					}}
-				>
+				<Form {...form} onSubmit={onSubmit}>
 					<Card>
 						<CardContent>
 							<FormField

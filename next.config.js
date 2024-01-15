@@ -18,7 +18,7 @@ const nextConfig = {
 		remotePatterns: [
 			{
 				protocol: 'https',
-				hostname: 'kendev01.infura-ipfs.io',
+				hostname: 'ivory-historic-sparrow-955.mypinata.cloud',
 				port: '',
 				pathname: '/ipfs/**',
 			},

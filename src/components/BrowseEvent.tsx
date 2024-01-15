@@ -31,5 +31,6 @@ export const BrowseEvent: FC<PropsWithChildren<{}>> = ({}) => {
 		)
 	}
 
-	return <>{"There's no upcoming event"}</>
+	// return <>{"There's no upcoming event"}</>
+	return <BlockPlaceholder />
 }

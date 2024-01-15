@@ -17,14 +17,17 @@ export const useGetEventDetails = (id: string) => {
 				JSON.stringify(data, (_, v) => (typeof v === 'bigint' ? v.toString() : v))
 			)
 
-			const eventMetadata = await fetch(event.uri).then(data => data.json())
+			const eventMetadata = await fetch(event.uri)
+				.then(data => data.json())
+				.then(data => JSON.parse(data))
 
 			setEvent({ ...event, ...eventMetadata })
 
 			const allTickets = await Promise.all(
 				tickets.map(async (res: any) => {
-					const metadata = await fetch(res.uri).then(data => data.json())
-					console.log('res', res)
+					const metadata = await fetch(res.uri)
+						.then(data => data.json())
+						.then(data => JSON.parse(data))
 					return { ...res, ...metadata }
 				})
 			)

@@ -1,28 +1,15 @@
 'use client'
 
 import Input from './ui/Input'
-import Button from './ui/Button'
-import { uploadIPFS } from '../lib/ipfs'
-import { Dispatch, FC, SetStateAction, useState } from 'react'
-import Card, { CardContent, CardFooter, CardHeader } from './ui/Card'
-import Form, { FormControl, FormField, FormItem, FormLabel, FormMessage, useForm } from './ui/Form'
+import { pinFileToIPFS } from '@/lib/ipfs'
+import { Dispatch, FC, SetStateAction } from 'react'
+import Card, { CardContent, CardHeader } from './ui/Card'
+import { FormControl, FormField, FormItem, FormLabel, FormMessage } from './ui/Form'
 
 const CreateEventForm: FC<{
-	setBanner: Dispatch<SetStateAction<string>>
+	setBanner: Dispatch<SetStateAction<any>>
 	setLoading: Dispatch<SetStateAction<boolean>>
 }> = ({ setBanner, setLoading }) => {
-	const toTimestamp = (strDate: string) => Date.parse(strDate) / 1000
-
-	const onImageChange = async (e: any) => {
-		const file = e.target.files[0]
-
-		setLoading(true)
-		const _imageUrl = await uploadIPFS(file)
-		setBanner(_imageUrl)
-
-		setLoading(false)
-	}
-
 	return (
 		<Card className="!mt-6">
 			<CardHeader className="font-bold">Event Information</CardHeader>
@@ -62,7 +49,14 @@ const CreateEventForm: FC<{
 							<FormControl>
 								<>
 									<FormLabel>Event Banner</FormLabel>
-									<Input {...field} type="file" onChange={onImageChange} />
+									<Input
+										{...field}
+										type="file"
+										onChange={(e: any) => {
+											const file = e.target.files[0]
+											setBanner(file)
+										}}
+									/>
 								</>
 							</FormControl>
 						</FormItem>

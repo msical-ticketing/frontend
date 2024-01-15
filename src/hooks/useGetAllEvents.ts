@@ -40,7 +40,10 @@ export const useGetAllEvents = (action: GetAllEventActions) => {
 		abi: msicalABI.abi,
 		functionName: 'getAllEvents',
 		chainId: 80001,
+		// watch: true,
+		// structuralSharing: (prev, next) => (prev === next ? prev : next),
 		onSuccess: async data => {
+			console.log('Getting all events...')
 			console.log('data', data)
 			// Parse the bigint valuess
 			const [events]: [EventResponse[]] = JSON.parse(
@@ -52,7 +55,10 @@ export const useGetAllEvents = (action: GetAllEventActions) => {
 			let allEvents: Event[] = await Promise.all(
 				events.map(async (event: EventResponse) => {
 					// if (event.uri.startsWith('http')) {
-					const metadata = await fetch(event.uri).then(data => data.json())
+					const metadata = await fetch(event.uri)
+						.then(data => data.json())
+						.then(data => JSON.parse(data))
+					console.log('metadata', metadata)
 					return { ...event, ...metadata }
 				})
 			)

@@ -8,24 +8,26 @@ import Card, { CardContent, CardFooter } from './ui/Card'
 import Dialog, { DialogContent, DialogTrigger } from './ui/Dialog'
 import Form, { FormField, FormItem, FormControl, FormLabel, useForm } from './ui/Form'
 
-const TicketCard: FC<PropsWithChildren<{ ticket: Ticket }>> = ({ ticket }) => {
+const TicketCard: FC<PropsWithChildren<{ ticket: any }>> = ({ ticket }) => {
 	const [isOpen, setOpen] = useState<boolean>(false)
 	const form = useForm<{}>({})
+
+	console.log('ticket', ticket)
 
 	return (
 		<Dialog open={isOpen} onOpenChange={setOpen}>
 			<Card className="w-fit shadow-ticket-2">
 				<CardContent className="flex flex-col mt-5 gap-4">
 					<Image
-						src={ticket.metadata.image}
+						src={ticket.image}
 						alt=""
 						width={300}
 						height={150}
 						style={{ objectFit: 'cover', borderRadius: '15px', aspectRatio: '2' }}
 					/>
 					<div className="mt-3">
-						<h3 className="text-lg font-bold">{`#${ticket.tokenId} - ${ticket.metadata.name}`}</h3>
-						<p>{ticket.metadata.description}</p>
+						<h3 className="text-lg font-bold">{`#${ticket.tokenId} - ${ticket.name}`}</h3>
+						<p>{ticket.description}</p>
 					</div>
 				</CardContent>
 				<CardFooter className="w-full flex justify-between">

@@ -10,7 +10,7 @@ import BlockPlaceholder from '@/components/BlockPlaceholder'
 interface PurchasedTicket {
 	amount: string
 	tokenId: string
-	metadata: string
+	token_uri: any
 }
 
 export const PurchasedTickets: FC<{}> = ({}) => {
@@ -43,13 +43,19 @@ export const PurchasedTickets: FC<{}> = ({}) => {
 				const ownedTickets = response.raw.result.filter(
 					res => res.token_address === `0x${process.env.NEXT_PUBLIC_MSICAL_COLLECTION}`.toLowerCase()
 				)
-				const purchasedTickets = ownedTickets.map((ticket: any) => {
-					return {
-						tokenId: ticket.token_id,
-						amount: ticket.amount,
-						metadata: JSON.parse(ticket.metadata),
-					}
-				})
+				const purchasedTickets = await Promise.all(
+					ownedTickets.map(async (ticket: any) => {
+						const metadata = await fetch(ticket.token_uri)
+							.then(data => data.json())
+							.then(data => JSON.parse(data))
+
+						return {
+							tokenId: ticket.token_id,
+							amount: ticket.amount,
+							...metadata,
+						}
+					})
+				)
 
 				console.log(purchasedTickets)
 

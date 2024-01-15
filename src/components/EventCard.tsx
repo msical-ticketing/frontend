@@ -6,6 +6,7 @@ import Button from '@/components/ui/Button'
 import Card, { CardContent, CardFooter } from '@/components/ui/Card'
 
 export const EventCard: FC<{ event: Event }> = ({ event }) => {
+	console.log('event', event)
 	return (
 		<Card className="shadow-ticket-2">
 			<CardContent className="py-6 grid gap-3">
